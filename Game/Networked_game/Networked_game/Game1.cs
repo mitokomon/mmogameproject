@@ -33,6 +33,7 @@ namespace Networked_game
         BinaryReader reader;
         BinaryWriter writer;
         //Temp ship stats
+        
         float ms;
         float fa;
         float ba;
@@ -42,6 +43,7 @@ namespace Networked_game
         float mbv;
 
         GameplayObject player;
+        GameplayObject origin;
         GameplayObject enemy;
         Boolean enemyConnected;
 
@@ -73,6 +75,7 @@ namespace Networked_game
             writeStream = new MemoryStream();
             writer = new BinaryWriter(writeStream);
             player = new GameplayObject();
+            origin = new GameplayObject();
             enemy = new GameplayObject();
             playerBullets = new List<GameplayObject>(10);
             enemyBullets = new List<GameplayObject>(10);
@@ -99,14 +102,15 @@ namespace Networked_game
             
             fa = 10;
             ba = 5;
-            mfv = 1000;
+            mfv = 500;
             mbv = -500;
 
             player.Texture = Content.Load<Texture2D>("PlayerPaper");
-            player.Rotation = MathHelper.ToRadians(-90);
-            player.Position = new Vector2(0 + 50, GraphicsDevice.Viewport.Height - player.Texture.Height);
-
             enemy.Texture = Content.Load<Texture2D>("EnemyPaper-2");
+            origin.Texture = Content.Load<Texture2D>("origin");
+            player.Rotation = MathHelper.ToRadians(-90);
+            player.Position = new Vector2(GraphicsDevice.Viewport.Width/2, GraphicsDevice.Viewport.Height / 2);
+            origin.Position = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2);
             bulletTexture = Content.Load<Texture2D>("BulletPaper_2");
 
             client = new TcpClient();
@@ -145,7 +149,10 @@ namespace Networked_game
             Vector2 movement = Vector2.Zero;
 
             if (current.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left))
+            {
+                //MessageBox.Show(origin.Position.X.ToString());
                 player.Rotation += MathHelper.ToRadians(-ms);
+            }
             if (current.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
                 player.Rotation += MathHelper.ToRadians(+ms);
             if (current.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up))
@@ -159,11 +166,11 @@ namespace Networked_game
                     fv -= ba;
             }
 
-            movement.X = fv * (float)Math.Cos(player.Rotation);
-            movement.Y = fv * (float)Math.Sin(player.Rotation);
+            movement.X = -fv * (float)Math.Cos(player.Rotation);
+            movement.Y = -fv * (float)Math.Sin(player.Rotation);
 
-            player.Velocity = movement;
-            player.Update(gameTime);
+           origin.Velocity = movement;
+           origin.Update(gameTime);
 
             foreach (GameplayObject gameObject in playerBullets)
                 gameObject.Update(gameTime);
@@ -171,15 +178,14 @@ namespace Networked_game
                 gameObject.Update(gameTime);
 
 
-            Vector2 nPosition = new Vector2(player.Position.X, player.Position.Y);
-            Vector2 dPosition = Vector2.Subtract(nPosition, iPosition);
-
-            if (dPosition != Vector2.Zero)
+            if (movement != Vector2.Zero &&enemyConnected) 
             {
                 writeStream.Position = 0;
                 writer.Write((byte)Protocol.PlayerMoved);
-                writer.Write(dPosition.X);
-                writer.Write(dPosition.Y);
+                writer.Write(origin.Position.X);
+                writer.Write(origin.Position.Y);
+                if (player.Rotation!=null)
+                 writer.Write(player.Rotation);
                 SendData(GetDataFromMemoryStream(writeStream));
             }
 
@@ -253,14 +259,14 @@ namespace Networked_game
                 p = (Protocol)reader.ReadByte();
                 if (p == Protocol.Connected)
                 {
+
                     byte id = reader.ReadByte();
                     string ip = reader.ReadString();
                     if (!enemyConnected)
                     {
                         enemyConnected = true;
                         enemy.Rotation = MathHelper.ToRadians(90);
-                        enemy.Position = new Vector2(0 + enemy.Rectangle.X, 0 + enemy.Rectangle.Y);
-
+                        enemy.Position = new Vector2(10,10);
                         writeStream.Position = 0;
                         writer.Write((byte)Protocol.Connected);
                         SendData(GetDataFromMemoryStream(writeStream));
@@ -278,9 +284,11 @@ namespace Networked_game
                 {
                     float px = reader.ReadSingle();
                     float py = reader.ReadSingle();
+                    float pr = reader.ReadSingle();
                     byte id = reader.ReadByte();
                     string ip = reader.ReadString();
-                    enemy.Position = new Vector2(enemy.Position.X + px, enemy.Position.Y - py);
+                    enemy.Position = new Vector2(-px + origin.Position.X + GraphicsDevice.Viewport.Width / 2, -py + origin.Position.Y + GraphicsDevice.Viewport.Height / 2);
+                    enemy.Rotation = pr;
                 }
                 else if (p == Protocol.BulletCreated)
                 {
@@ -355,6 +363,7 @@ namespace Networked_game
 
             spriteBatch.Begin();
             if (player != null) player.Draw(gameTime, spriteBatch);
+            if (origin != null) origin.Draw(gameTime, spriteBatch);
             if (enemyConnected) enemy.Draw(gameTime, spriteBatch);
             foreach (GameplayObject gameObject in playerBullets)
                 gameObject.Draw(gameTime, spriteBatch);

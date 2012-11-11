@@ -1,3 +1,4 @@
 Content\BulletPaper_2.xnb
 Content\EnemyPaper-2.xnb
 Content\PlayerPaper.xnb
+Content\origin.xnb
