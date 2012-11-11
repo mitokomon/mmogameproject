@@ -79,7 +79,6 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Camera.cs" />
     <Compile Include="Delegates.cs" />
     <Compile Include="GameplayObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

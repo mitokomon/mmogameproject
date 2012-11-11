@@ -17,7 +17,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\dakmor\Documents\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\EnemyPaper-2.xnb</Output>
-      <Time>2012-11-10T23:44:36.0763259+02:00</Time>
+      <Time>2012-11-11T23:47:41.3615437+02:00</Time>
     </Item>
     <Item>
       <Source>PlayerPaper.png</Source>
@@ -26,7 +26,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\dakmor\Documents\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\PlayerPaper.xnb</Output>
-      <Time>2012-11-10T23:44:36.0743258+02:00</Time>
+      <Time>2012-11-11T23:47:02.274308+02:00</Time>
     </Item>
     <Item>
       <Source>origin.png</Source>

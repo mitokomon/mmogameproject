@@ -55,7 +55,8 @@ namespace Networked_game
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-
+            //if (!graphics.IsFullScreen)
+            //    graphics.ToggleFullScreen();
             current = new KeyboardState();
             previous = new KeyboardState();
         }
@@ -99,11 +100,10 @@ namespace Networked_game
 
             ms = 3;
             fv = 0;
-            
-            fa = 10;
-            ba = 5;
-            mfv = 500;
-            mbv = -500;
+            fa = 5;
+            ba = 3;
+            mfv = 200;
+            mbv = -100;
 
             player.Texture = Content.Load<Texture2D>("PlayerPaper");
             enemy.Texture = Content.Load<Texture2D>("EnemyPaper-2");
@@ -130,10 +130,8 @@ namespace Networked_game
             // TODO: Unload any non ContentManager content here
         }
 
-        /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
@@ -308,12 +306,8 @@ namespace Networked_game
             }
 
         }
-
-        /// <summary>
+   
         /// Converts a MemoryStream to a byte array
-        /// </summary>
-        /// <param name="ms">MemoryStream to convert</param>
-        /// <returns>Byte array representation of the data</returns>
         private byte[] GetDataFromMemoryStream(MemoryStream ms)
         {
             byte[] result;
@@ -331,9 +325,7 @@ namespace Networked_game
             return result;
         }
 
-        /// <summary>
         /// Code to actually send the data to the client
-        /// </summary>
         /// <param name="b">Data to send</param>
         public void SendData(byte[] b)
         {
@@ -350,10 +342,7 @@ namespace Networked_game
             }
         }
 
-
-        /// <summary>
         /// This is called when the game should draw itself.
-        /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
