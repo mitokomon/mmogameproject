@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Networked_game", "Networked_game\Networked_game\Networked_game.csproj", "{2FA80379-5FF0-4FCD-8A84-4AA1DA16D9EB}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "Networked_gameContent", "Networked_game\Networked_gameContent\Networked_gameContent.contentproj", "{5420D36A-B4D2-40CF-8A9A-A467E251401B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2FA80379-5FF0-4FCD-8A84-4AA1DA16D9EB}.Debug|x86.ActiveCfg = Debug|x86
+		{2FA80379-5FF0-4FCD-8A84-4AA1DA16D9EB}.Debug|x86.Build.0 = Debug|x86
+		{2FA80379-5FF0-4FCD-8A84-4AA1DA16D9EB}.Release|x86.ActiveCfg = Release|x86
+		{2FA80379-5FF0-4FCD-8A84-4AA1DA16D9EB}.Release|x86.Build.0 = Release|x86
+		{5420D36A-B4D2-40CF-8A9A-A467E251401B}.Debug|x86.ActiveCfg = Debug|x86
+		{5420D36A-B4D2-40CF-8A9A-A467E251401B}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
