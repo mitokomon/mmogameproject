@@ -33,6 +33,7 @@ namespace Networked_game
         BinaryWriter writer;
 
         Player player;
+        StarBackground background;
         GameplayObject enemy;
         Boolean enemyConnected;
 
@@ -83,6 +84,7 @@ namespace Networked_game
             enemy.Texture = Content.Load<Texture2D>("EnemyPaper-2");
             bulletTexture = Content.Load<Texture2D>("BulletPaper_2");
             player = new Player(new GameplayObject(), 3,5, 3, 0, 200, -100, Content.Load<Texture2D>("PlayerPaper"), new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2));
+            background = new StarBackground(player, Content.Load<Texture2D>("fluffyball"), 100);
             client = new TcpClient();
             client.NoDelay = true;
             client.Connect(IP, PORT);
@@ -119,7 +121,7 @@ namespace Networked_game
                 down = true;
 
             player.Update(gameTime, up, down, left, right);
-
+            background.Update(gameTime);
 
 
             foreach (GameplayObject gameObject in playerBullets)
@@ -300,9 +302,9 @@ namespace Networked_game
         {
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
+            background.Draw(spriteBatch);
             player.Draw().Draw(gameTime, spriteBatch);
             if (enemyConnected) enemy.Draw(gameTime, spriteBatch);
-
             foreach (GameplayObject gameObject in playerBullets)
                 gameObject.Draw(gameTime, spriteBatch);
             foreach (GameplayObject gameObject in enemyBullets)

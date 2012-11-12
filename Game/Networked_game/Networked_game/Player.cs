@@ -15,7 +15,7 @@ using System.IO;
 
 namespace Networked_game
 {
-    class Player
+    public class Player
     {
         float ms;
         float fa;
@@ -24,7 +24,7 @@ namespace Networked_game
         float mfv;
         float mbv;
         public GameplayObject player;
-        GameplayObject origin;
+        public GameplayObject origin;
 
 
         public Player(GameplayObject player, float ms, float fa, float ba, float fv, float mfv, float mbv, Texture2D texture,Vector2 position)
