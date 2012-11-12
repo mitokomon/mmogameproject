@@ -318,7 +318,7 @@ namespace Networked_game
 
             spriteBatch.DrawString(font, "Rotation   :" + ((int)(MathHelper.ToDegrees(player.player.Rotation)+90+360)%360).ToString(), new Vector2(10, 540), Color.White);
             spriteBatch.DrawString(font, "Speed      :"+ player.fv, new Vector2(10, 560), Color.White);
-            spriteBatch.DrawString(font, "Coordinates: " + new Vector2(-(int)player.origin.Position.X+400, (int)player.origin.Position.Y-300).ToString(), new Vector2(10, 580), Color.White);
+            spriteBatch.DrawString(font, "Coordinates: " + new Vector2((-(int)player.origin.Position.X+400)/10, (int)(player.origin.Position.Y-300)/10).ToString(), new Vector2(10, 580), Color.White);
             spriteBatch.End();
             base.Draw(gameTime);
         }
