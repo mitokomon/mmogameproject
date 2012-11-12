@@ -15,11 +15,10 @@ using System.IO;
 
 namespace Networked_game
 {
-    /// <summary>
-    /// This is the main type for your game
-    /// </summary>
+
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+       
         Texture2D bulletTexture;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -32,18 +31,8 @@ namespace Networked_game
         MemoryStream readStream, writeStream;
         BinaryReader reader;
         BinaryWriter writer;
-        //Temp ship stats
-        
-        float ms;
-        float fa;
-        float ba;
-        float fv;
-        float bv;
-        float mfv;
-        float mbv;
 
-        GameplayObject player;
-        GameplayObject origin;
+        Player player;
         GameplayObject enemy;
         Boolean enemyConnected;
 
@@ -54,6 +43,9 @@ namespace Networked_game
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferHeight = 600;
+            graphics.PreferredBackBufferWidth = 800;
+            graphics.ApplyChanges();
             Content.RootDirectory = "Content";
             //if (!graphics.IsFullScreen)
             //    graphics.ToggleFullScreen();
@@ -61,22 +53,16 @@ namespace Networked_game
             previous = new KeyboardState();
         }
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
+
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            enemyConnected=false;
+            enemyConnected = false;
             readStream = new MemoryStream();
             reader = new BinaryReader(readStream);
             writeStream = new MemoryStream();
             writer = new BinaryWriter(writeStream);
-            player = new GameplayObject();
-            origin = new GameplayObject();
+
             enemy = new GameplayObject();
             playerBullets = new List<GameplayObject>(10);
             enemyBullets = new List<GameplayObject>(10);
@@ -89,86 +75,52 @@ namespace Networked_game
 
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
+
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
+
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            ms = 3;
-            fv = 0;
-            fa = 5;
-            ba = 3;
-            mfv = 200;
-            mbv = -100;
-
-            player.Texture = Content.Load<Texture2D>("PlayerPaper");
             enemy.Texture = Content.Load<Texture2D>("EnemyPaper-2");
-            origin.Texture = Content.Load<Texture2D>("origin");
-            player.Rotation = MathHelper.ToRadians(-90);
-            player.Position = new Vector2(GraphicsDevice.Viewport.Width/2, GraphicsDevice.Viewport.Height / 2);
-            origin.Position = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2);
             bulletTexture = Content.Load<Texture2D>("BulletPaper_2");
-
+            player = new Player(new GameplayObject(), 3,5, 3, 0, 200, -100, Content.Load<Texture2D>("PlayerPaper"), new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2));
             client = new TcpClient();
             client.NoDelay = true;
             client.Connect(IP, PORT);
             readBuffer = new byte[BUFFER_SIZE];
             client.GetStream().BeginRead(readBuffer, 0, BUFFER_SIZE, StreamReceived, null);
-            // TODO: use this.Content to load your game content here
         }
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// all content.
-        /// </summary>
+
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
         }
 
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+
+            Boolean up = false;
+            Boolean down = false;
+            Boolean left = false;
+            Boolean right = false;
+
             previous = current;
             current = Keyboard.GetState();
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
                 this.Exit();
 
-            // TODO: Add your update logic here
-            Vector2 iPosition = new Vector2(player.Position.X, player.Position.Y);
-
-            Vector2 movement = Vector2.Zero;
-
             if (current.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left))
-            {
-                //MessageBox.Show(origin.Position.X.ToString());
-                player.Rotation += MathHelper.ToRadians(-ms);
-            }
+                left = true;
             if (current.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
-                player.Rotation += MathHelper.ToRadians(+ms);
+                right = true;
             if (current.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up))
-            {
-                if (fv < mfv)
-                    fv += fa;
-            }
+                up = true;
             if (current.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Down))
-            {
-                if (fv > mbv)
-                    fv -= ba;
-            }
+                down = true;
 
-            movement.X = -fv * (float)Math.Cos(player.Rotation);
-            movement.Y = -fv * (float)Math.Sin(player.Rotation);
+            player.Update(gameTime, up, down, left, right);
 
-           origin.Velocity = movement;
-           origin.Update(gameTime);
+
 
             foreach (GameplayObject gameObject in playerBullets)
                 gameObject.Update(gameTime);
@@ -176,14 +128,13 @@ namespace Networked_game
                 gameObject.Update(gameTime);
 
 
-            if (movement != Vector2.Zero &&enemyConnected) 
+            if (enemyConnected)
             {
                 writeStream.Position = 0;
                 writer.Write((byte)Protocol.PlayerMoved);
-                writer.Write(origin.Position.X);
-                writer.Write(origin.Position.Y);
-                if (player.Rotation!=null)
-                 writer.Write(player.Rotation);
+                writer.Write(player.getPosition().X);
+                writer.Write(player.getPosition().Y);
+                writer.Write(player.player.Rotation);
                 SendData(GetDataFromMemoryStream(writeStream));
             }
 
@@ -192,18 +143,18 @@ namespace Networked_game
             {
                 if (current.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space) && previous.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.Space))
                 {
-                    GameplayObject bullet = new GameplayObject();
-                    bullet.Texture = bulletTexture;
-                    bullet.Position = player.Position;
-                    bullet.Rotation = player.Rotation;
-                    bullet.Speed = 200;
-                    bullet.Velocity = new Vector2(bullet.Speed * (float)Math.Cos(bullet.Rotation),
-                        bullet.Speed * (float)Math.Sin(bullet.Rotation));
-                    writeStream.Position = 0;
-                    writer.Write((byte)Protocol.BulletCreated);
-                    SendData(GetDataFromMemoryStream(writeStream));
-                    playerBullets.Add(bullet);
-                    bulletTimer = TimeSpan.FromSeconds(shotseconds);
+                    //GameplayObject bullet = new GameplayObject();
+                    //bullet.Texture = bulletTexture;
+                    //bullet.Position = player.Position;
+                    //bullet.Rotation = player.Rotation;
+                    //bullet.Speed = 200;
+                    //bullet.Velocity = new Vector2(bullet.Speed * (float)Math.Cos(bullet.Rotation),
+                    //    bullet.Speed * (float)Math.Sin(bullet.Rotation));
+                    //writeStream.Position = 0;
+                    //writer.Write((byte)Protocol.BulletCreated);
+                    //SendData(GetDataFromMemoryStream(writeStream));
+                    //playerBullets.Add(bullet);
+                    //bulletTimer = TimeSpan.FromSeconds(shotseconds);
                 }
             }
 
@@ -239,7 +190,7 @@ namespace Networked_game
 
             ProcessData(data);
 
-                client.GetStream().BeginRead(readBuffer, 0, BUFFER_SIZE, StreamReceived, null);
+            client.GetStream().BeginRead(readBuffer, 0, BUFFER_SIZE, StreamReceived, null);
         }
 
         private void ProcessData(byte[] data)
@@ -264,12 +215,12 @@ namespace Networked_game
                     {
                         enemyConnected = true;
                         enemy.Rotation = MathHelper.ToRadians(90);
-                        enemy.Position = new Vector2(10,10);
+                        enemy.Position = new Vector2(10, 10);
                         writeStream.Position = 0;
                         writer.Write((byte)Protocol.Connected);
                         SendData(GetDataFromMemoryStream(writeStream));
                     }
-                    
+
                 }
                 else if (p == Protocol.Disconnected)
                 {
@@ -285,7 +236,7 @@ namespace Networked_game
                     float pr = reader.ReadSingle();
                     byte id = reader.ReadByte();
                     string ip = reader.ReadString();
-                    enemy.Position = new Vector2(-px + origin.Position.X + GraphicsDevice.Viewport.Width / 2, -py + origin.Position.Y + GraphicsDevice.Viewport.Height / 2);
+                    enemy.Position = new Vector2(-px + player.getPosition().X + GraphicsDevice.Viewport.Width/2, -py + player.getPosition().Y + GraphicsDevice.Viewport.Height / 2);
                     enemy.Rotation = pr;
                 }
                 else if (p == Protocol.BulletCreated)
@@ -306,7 +257,7 @@ namespace Networked_game
             }
 
         }
-   
+
         /// Converts a MemoryStream to a byte array
         private byte[] GetDataFromMemoryStream(MemoryStream ms)
         {
@@ -339,6 +290,7 @@ namespace Networked_game
             }
             catch (Exception e)
             {
+                MessageBox.Show(e.Message);
             }
         }
 
@@ -346,19 +298,16 @@ namespace Networked_game
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here
-
+            GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
-            if (player != null) player.Draw(gameTime, spriteBatch);
-            if (origin != null) origin.Draw(gameTime, spriteBatch);
+            player.Draw().Draw(gameTime, spriteBatch);
             if (enemyConnected) enemy.Draw(gameTime, spriteBatch);
+
             foreach (GameplayObject gameObject in playerBullets)
                 gameObject.Draw(gameTime, spriteBatch);
             foreach (GameplayObject gameObject in enemyBullets)
                 gameObject.Draw(gameTime, spriteBatch);
-            
+
             spriteBatch.End();
             base.Draw(gameTime);
         }

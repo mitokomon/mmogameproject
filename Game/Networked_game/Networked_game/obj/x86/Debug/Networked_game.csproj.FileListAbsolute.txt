@@ -26,3 +26,14 @@ C:\Users\dakmor\Documents\GitHub\mmogameproject\Game\Networked_game\Networked_ga
 C:\Users\dakmor\Documents\GitHub\mmogameproject\Game\Networked_game\Networked_game\obj\x86\Debug\Networked_game.exe
 C:\Users\dakmor\Documents\GitHub\mmogameproject\Game\Networked_game\Networked_game\obj\x86\Debug\Networked_game.pdb
 C:\Users\dakmor\Documents\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\origin.xnb
+D:\set\belgeler\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\BulletPaper_2.xnb
+D:\set\belgeler\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\EnemyPaper-2.xnb
+D:\set\belgeler\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\PlayerPaper.xnb
+D:\set\belgeler\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\origin.xnb
+D:\set\belgeler\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Networked_game.exe
+D:\set\belgeler\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Networked_game.pdb
+D:\set\belgeler\GitHub\mmogameproject\Game\Networked_game\Networked_game\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\set\belgeler\GitHub\mmogameproject\Game\Networked_game\Networked_game\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+D:\set\belgeler\GitHub\mmogameproject\Game\Networked_game\Networked_game\obj\x86\Debug\Networked_game.exe
+D:\set\belgeler\GitHub\mmogameproject\Game\Networked_game\Networked_game\obj\x86\Debug\Networked_game.pdb
+D:\set\belgeler\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\fluffyball.xnb
