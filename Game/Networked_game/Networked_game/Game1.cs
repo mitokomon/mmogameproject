@@ -316,10 +316,14 @@ namespace Networked_game
             foreach (GameplayObject gameObject in enemyBullets)
                 gameObject.Draw(gameTime, spriteBatch);
 
-            spriteBatch.DrawString(font, "Speed:" + ((int)Math.Sqrt(Math.Pow(player.origin.Velocity.X * Math.Cos(player.player.Rotation), 2) + Math.Pow(player.origin.Velocity.Y * Math.Sin(player.player.Rotation), 2))).ToString() + " " + new Vector2(-(int)player.origin.Velocity.X, (int)player.origin.Velocity.Y).ToString(), new Vector2(10, 560), Color.White);
-            spriteBatch.DrawString(font, "Coordinates: " + new Vector2((int)player.origin.Position.X, (int)player.origin.Position.Y).ToString(), new Vector2(10, 580), Color.White);
+            spriteBatch.DrawString(font, "Rotation   :" + ((int)(MathHelper.ToDegrees(player.player.Rotation)+90+360)%360).ToString(), new Vector2(10, 540), Color.White);
+            spriteBatch.DrawString(font, "Speed      :"+ player.fv, new Vector2(10, 560), Color.White);
+            spriteBatch.DrawString(font, "Coordinates: " + new Vector2(-(int)player.origin.Position.X+400, (int)player.origin.Position.Y-300).ToString(), new Vector2(10, 580), Color.White);
             spriteBatch.End();
             base.Draw(gameTime);
         }
     }
 }
+
+
+

@@ -20,7 +20,7 @@ namespace Networked_game
         float ms;
         float fa;
         float ba;
-        float fv;
+        public float fv;
         float mfv;
         float mbv;
         public GameplayObject player;
@@ -62,13 +62,17 @@ namespace Networked_game
                 player.Rotation += MathHelper.ToRadians(-ms);
             if (up == true)
             {
-                if (    Math.Sqrt(Math.Pow(-fv * (float)Math.Cos(player.Rotation),2)+ Math.Pow(-fv * (float)Math.Sin(player.Rotation),2))<mfv  )
+                if (fv<=mfv-fa  )
                     fv += fa;
+                else
+                    fv=mfv;
             }
             else if (down == true)
             {
-                if (    Math.Sqrt(Math.Pow(-fv * (float)Math.Cos(player.Rotation),2)+ Math.Pow(-fv * (float)Math.Sin(player.Rotation),2))>mbv  )
+                if (fv >= mbv + ba)
                     fv -= ba;
+                else
+                    fv = mbv;
             }
             origin.Velocity = new Vector2(-fv * (float)Math.Cos(player.Rotation), -fv * (float)Math.Sin(player.Rotation));
             origin.Update(gameTime);
