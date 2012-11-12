@@ -36,6 +36,7 @@ namespace Networked_game
 
         Player player;
         StarBackground background;
+        PlayerX[] players;
         GameplayObject enemy;
         Boolean enemyConnected;
 
@@ -58,7 +59,7 @@ namespace Networked_game
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            players = new PlayerX[100]; //MAX CONNECTION NUMBER
             enemyConnected = false;
             readStream = new MemoryStream();
             reader = new BinaryReader(readStream);
@@ -125,6 +126,11 @@ namespace Networked_game
                 down = true;
 
             player.Update(gameTime, up, down, left, right);
+            foreach (PlayerX gameObject in players)
+            {
+                if (gameObject!=null)
+                    gameObject.Update(gameTime);
+            }
             background.Update(gameTime);
 
 
@@ -134,15 +140,13 @@ namespace Networked_game
                 gameObject.Update(gameTime);
 
 
-            if (enemyConnected)
-            {
+
                 writeStream.Position = 0;
                 writer.Write((byte)Protocol.PlayerMoved);
-                writer.Write(player.getPosition().X);
-                writer.Write(player.getPosition().Y);
-                writer.Write(player.player.Rotation);
+                writer.Write(String.Format("{0:0.0#}",player.getPosition().X));
+                writer.Write(String.Format("{0:0.0#}", player.getPosition().Y));
+                writer.Write(String.Format("{0:0.0#}",player.player.Rotation));
                 SendData(GetDataFromMemoryStream(writeStream));
-            }
 
             if (bulletTimer.TotalSeconds > 0) bulletTimer = bulletTimer.Subtract(gameTime.ElapsedGameTime);
             else
@@ -180,7 +184,7 @@ namespace Networked_game
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("3 " + ex.Message);
             }
 
             if (bytesRead == 0)
@@ -195,7 +199,7 @@ namespace Networked_game
                 data[i] = readBuffer[i];
 
             ProcessData(data);
-
+            
             client.GetStream().BeginRead(readBuffer, 0, BUFFER_SIZE, StreamReceived, null);
         }
 
@@ -214,54 +218,38 @@ namespace Networked_game
                 p = (Protocol)reader.ReadByte();
                 if (p == Protocol.Connected)
                 {
-
                     byte id = reader.ReadByte();
                     string ip = reader.ReadString();
-                    if (!enemyConnected)
+                    if (players[id] == null)
+                        players[id] = new PlayerX(new GameplayObject(), Content.Load<Texture2D>("PlayerPaper"));
+                }
+                //if (p == Protocol.Disconnected)
+                //{
+                //    byte id = reader.ReadByte();
+                //    string ip = reader.ReadString();
+                //}
+                if (p == Protocol.PlayerMoved)
+                {
+                    string px = reader.ReadString();
+                    string py = reader.ReadString();
+                    string pr = reader.ReadString();
+                    byte id = reader.ReadByte();
+                    //string ip = reader.ReadString();
+                    if (players[id] == null)
+                        players[id] = new PlayerX(new GameplayObject(), Content.Load<Texture2D>("PlayerPaper"));
+                    if (px != null && pr != null && players[id]!=null)
                     {
-                        enemyConnected = true;
-                        enemy.Rotation = MathHelper.ToRadians(90);
-                        enemy.Position = new Vector2(10, 10);
-                        writeStream.Position = 0;
-                        writer.Write((byte)Protocol.Connected);
-                        SendData(GetDataFromMemoryStream(writeStream));
+                        players[id].positionX = -float.Parse(px) + player.origin.Position.X ;
+                        players[id].positionY = -float.Parse(py) + player.origin.Position.Y ;
                     }
+                    if (pr!=null & players[id]!=null)
+                        players[id].player.Rotation = float.Parse(pr);
+                }
 
-                }
-                else if (p == Protocol.Disconnected)
-                {
-                    enemyConnected = false;
-                    byte id = reader.ReadByte();
-                    string ip = reader.ReadString();
-                    enemy = null;
-                }
-                else if (p == Protocol.PlayerMoved)
-                {
-                    float px = reader.ReadSingle();
-                    float py = reader.ReadSingle();
-                    float pr = reader.ReadSingle();
-                    byte id = reader.ReadByte();
-                    string ip = reader.ReadString();
-                    if (px!=null  && pr!=null)
-                        enemy.Position = new Vector2(-px + player.getPosition().X + GraphicsDevice.Viewport.Width/2, -py + player.getPosition().Y + GraphicsDevice.Viewport.Height / 2);
-                    if (pr!=null)
-                        enemy.Rotation = pr;
-                }
-                else if (p == Protocol.BulletCreated)
-                {
-                    GameplayObject bullet = new GameplayObject();
-                    bullet.Texture = bulletTexture;
-                    bullet.Position = enemy.Position;
-                    bullet.Rotation = enemy.Rotation;
-                    bullet.Speed = 200;
-                    bullet.Velocity = new Vector2(bullet.Speed * (float)Math.Cos(bullet.Rotation),
-                        bullet.Speed * (float)Math.Sin(bullet.Rotation));
-                    enemyBullets.Add(bullet);
-                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("1 " +ex.Message);
             }
 
         }
@@ -298,7 +286,7 @@ namespace Networked_game
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
+                MessageBox.Show("2 " + e.Message);
             }
         }
 
@@ -310,7 +298,11 @@ namespace Networked_game
             spriteBatch.Begin();
             background.Draw(spriteBatch);
             player.Draw().Draw(gameTime, spriteBatch);
-            if (enemyConnected) enemy.Draw(gameTime, spriteBatch);
+            foreach (PlayerX gameObject in players)
+            {
+                if (gameObject!=null)
+                    gameObject.Draw().Draw(gameTime, spriteBatch);
+            }
             foreach (GameplayObject gameObject in playerBullets)
                 gameObject.Draw(gameTime, spriteBatch);
             foreach (GameplayObject gameObject in enemyBullets)

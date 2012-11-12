@@ -74,6 +74,7 @@ namespace Networked_game
                 else
                     fv = mbv;
             }
+            
             origin.Velocity = new Vector2(-fv * (float)Math.Cos(player.Rotation), -fv * (float)Math.Sin(player.Rotation));
             origin.Update(gameTime);
         }
