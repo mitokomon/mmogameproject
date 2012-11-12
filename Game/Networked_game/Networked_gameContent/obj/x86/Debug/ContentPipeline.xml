@@ -46,6 +46,15 @@
       <Output>D:\set\belgeler\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\fluffyball.xnb</Output>
       <Time>2012-11-12T10:03:28.6890204+02:00</Time>
     </Item>
+    <Item>
+      <Source>font1.spritefont</Source>
+      <Name>font1</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\set\belgeler\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\font1.xnb</Output>
+      <Time>2012-11-12T15:14:56.8519222+02:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <TargetPlatform>Windows</TargetPlatform>

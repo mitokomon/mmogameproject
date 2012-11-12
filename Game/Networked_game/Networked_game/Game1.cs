@@ -22,6 +22,7 @@ namespace Networked_game
         Texture2D bulletTexture;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        SpriteFont font;
         TcpClient client;
         string IP = "127.0.0.1";
         int PORT = 1490;
@@ -31,6 +32,7 @@ namespace Networked_game
         MemoryStream readStream, writeStream;
         BinaryReader reader;
         BinaryWriter writer;
+
 
         Player player;
         StarBackground background;
@@ -48,8 +50,8 @@ namespace Networked_game
             graphics.PreferredBackBufferWidth = 800;
             graphics.ApplyChanges();
             Content.RootDirectory = "Content";
-            //if (!graphics.IsFullScreen)
-            //    graphics.ToggleFullScreen();
+            if (!graphics.IsFullScreen)
+               graphics.ToggleFullScreen();
             current = new KeyboardState();
             previous = new KeyboardState();
         }
@@ -81,9 +83,10 @@ namespace Networked_game
         {
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            font = Content.Load<SpriteFont>("font1");
             enemy.Texture = Content.Load<Texture2D>("EnemyPaper-2");
             bulletTexture = Content.Load<Texture2D>("BulletPaper_2");
-            player = new Player(new GameplayObject(), 3,5, 3, 0, 200, -100, Content.Load<Texture2D>("PlayerPaper"), new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2));
+            player = new Player(new GameplayObject(), 3,5, 3, 0, 500, -300, Content.Load<Texture2D>("PlayerPaper"), new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2));
             background = new StarBackground(player, Content.Load<Texture2D>("fluffyball"), 100);
             client = new TcpClient();
             client.NoDelay = true;
@@ -310,6 +313,8 @@ namespace Networked_game
             foreach (GameplayObject gameObject in enemyBullets)
                 gameObject.Draw(gameTime, spriteBatch);
 
+            spriteBatch.DrawString(font, "Speed:" + ((int)Math.Sqrt(Math.Pow(player.origin.Velocity.X * Math.Cos(player.player.Rotation), 2) + Math.Pow(player.origin.Velocity.Y * Math.Sin(player.player.Rotation), 2))).ToString() + " " + new Vector2(-(int)player.origin.Velocity.X, (int)player.origin.Velocity.Y).ToString(), new Vector2(10, 560), Color.White);
+            spriteBatch.DrawString(font, "Coordinates: " + new Vector2((int)player.origin.Position.X, (int)player.origin.Position.Y).ToString(), new Vector2(10, 580), Color.White);
             spriteBatch.End();
             base.Draw(gameTime);
         }

@@ -43,8 +43,6 @@ namespace Networked_game
             origin = new GameplayObject();
             origin.Texture = texture;
             origin.Position = position;
-            
-
         }
 
         public GameplayObject Draw( )
@@ -64,12 +62,12 @@ namespace Networked_game
                 player.Rotation += MathHelper.ToRadians(-ms);
             if (up == true)
             {
-                if (fv < mfv)
+                if (    Math.Sqrt(Math.Pow(-fv * (float)Math.Cos(player.Rotation),2)+ Math.Pow(-fv * (float)Math.Sin(player.Rotation),2))<mfv  )
                     fv += fa;
             }
             else if (down == true)
             {
-                if (fv > mbv)
+                if (    Math.Sqrt(Math.Pow(-fv * (float)Math.Cos(player.Rotation),2)+ Math.Pow(-fv * (float)Math.Sin(player.Rotation),2))>mbv  )
                     fv -= ba;
             }
             origin.Velocity = new Vector2(-fv * (float)Math.Cos(player.Rotation), -fv * (float)Math.Sin(player.Rotation));

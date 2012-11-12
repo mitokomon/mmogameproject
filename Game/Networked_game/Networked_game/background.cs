@@ -27,8 +27,8 @@ namespace Networked_game
             _Stars = new List<Star>();
             _Random = new Random(DateTime.Now.Millisecond);
 
-            MaxX = 600;
-            MaxY = 800;
+            MaxX = 1000;
+            MaxY = 1000;
 
             Vector2 PlayPos = player.getPosition();
             _StarTexture = texture;
@@ -62,7 +62,7 @@ namespace Networked_game
         {
             foreach (Star s in _Stars)
             {
-                s.Position -= player.origin.Velocity * -1f /100* s.Depth;
+                s.Position -= player.origin.Velocity * -1f /500* s.Depth;
 
                 if (s.Position.X > MaxX + 501)
                     s.Position.X -= s.Position.X + 500;
