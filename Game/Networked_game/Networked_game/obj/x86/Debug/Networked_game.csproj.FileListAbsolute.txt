@@ -38,3 +38,5 @@ D:\set\belgeler\GitHub\mmogameproject\Game\Networked_game\Networked_game\obj\x86
 D:\set\belgeler\GitHub\mmogameproject\Game\Networked_game\Networked_game\obj\x86\Debug\Networked_game.pdb
 D:\set\belgeler\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\fluffyball.xnb
 D:\set\belgeler\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\font1.xnb
+C:\Users\dakmor\Documents\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\fluffyball.xnb
+C:\Users\dakmor\Documents\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\font1.xnb

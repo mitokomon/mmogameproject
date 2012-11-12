@@ -37,6 +37,24 @@
       <Output>C:\Users\dakmor\Documents\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\origin.xnb</Output>
       <Time>2012-11-11T19:36:01.9385584+02:00</Time>
     </Item>
+    <Item>
+      <Source>fluffyball.png</Source>
+      <Name>fluffyball</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\dakmor\Documents\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\fluffyball.xnb</Output>
+      <Time>2012-11-12T16:34:59.545865+02:00</Time>
+    </Item>
+    <Item>
+      <Source>font1.spritefont</Source>
+      <Name>font1</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\dakmor\Documents\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\font1.xnb</Output>
+      <Time>2012-11-12T16:34:59.545865+02:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{5420D36A-B4D2-40CF-8A9A-A467E251401B}</ContentProjectGUID>

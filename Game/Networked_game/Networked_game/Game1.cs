@@ -50,8 +50,7 @@ namespace Networked_game
             graphics.PreferredBackBufferWidth = 800;
             graphics.ApplyChanges();
             Content.RootDirectory = "Content";
-            if (!graphics.IsFullScreen)
-               graphics.ToggleFullScreen();
+
             current = new KeyboardState();
             previous = new KeyboardState();
         }
@@ -114,6 +113,8 @@ namespace Networked_game
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
                 this.Exit();
 
+            if (current.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F))
+                graphics.ToggleFullScreen();
             if (current.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left))
                 left = true;
             if (current.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
@@ -241,8 +242,10 @@ namespace Networked_game
                     float pr = reader.ReadSingle();
                     byte id = reader.ReadByte();
                     string ip = reader.ReadString();
-                    enemy.Position = new Vector2(-px + player.getPosition().X + GraphicsDevice.Viewport.Width/2, -py + player.getPosition().Y + GraphicsDevice.Viewport.Height / 2);
-                    enemy.Rotation = pr;
+                    if (px!=null  && pr!=null)
+                        enemy.Position = new Vector2(-px + player.getPosition().X + GraphicsDevice.Viewport.Width/2, -py + player.getPosition().Y + GraphicsDevice.Viewport.Height / 2);
+                    if (pr!=null)
+                        enemy.Rotation = pr;
                 }
                 else if (p == Protocol.BulletCreated)
                 {
