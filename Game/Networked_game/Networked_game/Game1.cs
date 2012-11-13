@@ -19,7 +19,6 @@ namespace Networked_game
     public class Game1 : Microsoft.Xna.Framework.Game
     {
        
-        Texture2D bulletTexture;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteFont font;
@@ -28,7 +27,6 @@ namespace Networked_game
         int PORT = 1490;
         int BUFFER_SIZE = 2048;
         byte[] readBuffer;
-        List<GameplayObject> playerBullets, enemyBullets;
         MemoryStream readStream, writeStream;
         BinaryReader reader;
         BinaryWriter writer;
@@ -37,12 +35,8 @@ namespace Networked_game
         Player player;
         StarBackground background;
         PlayerX[] players;
-        GameplayObject enemy;
-        Boolean enemyConnected;
 
         KeyboardState current, previous;
-        TimeSpan bulletTimer;
-        float shotseconds;
 
         public Game1()
         {
@@ -60,19 +54,12 @@ namespace Networked_game
         protected override void Initialize()
         {
             players = new PlayerX[100]; //MAX CONNECTION NUMBER
-            enemyConnected = false;
+            
             readStream = new MemoryStream();
             reader = new BinaryReader(readStream);
             writeStream = new MemoryStream();
             writer = new BinaryWriter(writeStream);
-
-            enemy = new GameplayObject();
-            playerBullets = new List<GameplayObject>(10);
-            enemyBullets = new List<GameplayObject>(10);
-
             current = previous = Keyboard.GetState();
-            shotseconds = 5;
-            bulletTimer = TimeSpan.FromSeconds(shotseconds);
 
             base.Initialize();
 
@@ -84,8 +71,6 @@ namespace Networked_game
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font = Content.Load<SpriteFont>("font1");
-            enemy.Texture = Content.Load<Texture2D>("EnemyPaper-2");
-            bulletTexture = Content.Load<Texture2D>("BulletPaper_2");
             player = new Player(new GameplayObject(), 3,5, 3, 0, 500, -300, Content.Load<Texture2D>("PlayerPaper"), new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2));
             background = new StarBackground(player, Content.Load<Texture2D>("fluffyball"), 100);
             client = new TcpClient();
@@ -110,12 +95,14 @@ namespace Networked_game
 
             previous = current;
             current = Keyboard.GetState();
-            // Allows the game to exit
+
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
                 this.Exit();
 
             if (current.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F))
                 graphics.ToggleFullScreen();
+
             if (current.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left))
                 left = true;
             if (current.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
@@ -126,6 +113,7 @@ namespace Networked_game
                 down = true;
 
             player.Update(gameTime, up, down, left, right);
+
             foreach (PlayerX gameObject in players)
             {
                 if (gameObject!=null)
@@ -133,40 +121,19 @@ namespace Networked_game
             }
             background.Update(gameTime);
 
-
-            foreach (GameplayObject gameObject in playerBullets)
-                gameObject.Update(gameTime);
-            foreach (GameplayObject gameObject in enemyBullets)
-                gameObject.Update(gameTime);
-                writeStream.Position = 0;
-                writer.Write((byte)Protocol.PlayerMoved);
-                writer.Write((Int16)player.getPosition().X);
-                writer.Write((Int16)player.getPosition().Y);
-                writer.Write((Int16)MathHelper.ToDegrees(player.player.Rotation));
-                SendData(GetDataFromMemoryStream(writeStream));
-
-            if (bulletTimer.TotalSeconds > 0) bulletTimer = bulletTimer.Subtract(gameTime.ElapsedGameTime);
-            else
-            {
-                if (current.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space) && previous.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.Space))
-                {
-                    //GameplayObject bullet = new GameplayObject();
-                    //bullet.Texture = bulletTexture;
-                    //bullet.Position = player.Position;
-                    //bullet.Rotation = player.Rotation;
-                    //bullet.Speed = 200;
-                    //bullet.Velocity = new Vector2(bullet.Speed * (float)Math.Cos(bullet.Rotation),
-                    //    bullet.Speed * (float)Math.Sin(bullet.Rotation));
-                    //writeStream.Position = 0;
-                    //writer.Write((byte)Protocol.BulletCreated);
-                    //SendData(GetDataFromMemoryStream(writeStream));
-                    //playerBullets.Add(bullet);
-                    //bulletTimer = TimeSpan.FromSeconds(shotseconds);
-                }
-            }
+            writeStream.Position = 0;
+            writer.Write((byte)Protocol.PlayerMoved);
+            writer.Write((Int16)player.getPosition().X);
+            writer.Write((Int16)player.getPosition().Y);
+            writer.Write((Int16)MathHelper.ToDegrees(player.player.Rotation));
+            SendData(GetDataFromMemoryStream(writeStream));
 
             base.Update(gameTime);
         }
+
+
+
+
 
         private void StreamReceived(IAsyncResult ar)
         {
@@ -181,7 +148,7 @@ namespace Networked_game
             }
             catch (Exception ex)
             {
-                MessageBox.Show("3 " + ex.Message);
+                //MessageBox.Show("3 " + ex.Message);
             }
 
             if (bytesRead == 0)
@@ -240,31 +207,26 @@ namespace Networked_game
                     float pr = reader.ReadInt16(); checker = 13;
                     byte id = reader.ReadByte(); checker = 14;
                     //string ip = reader.ReadString(); checker = 5;
-                    //if (players[id] == null)
-                    //    players[id] = new PlayerX(new GameplayObject(), Content.Load<Texture2D>("PlayerPaper"));
-                    if (px != null && pr != null && players[id]!=null)
+                    if (players[id]!=null)
                     {
                         players[id].positionX = -px + player.origin.Position.X ;
                         players[id].positionY = -py + player.origin.Position.Y ;
                     }
-                    if (pr!=null & players[id]!=null)
+                    if (players[id]!=null)
                         players[id].player.Rotation =MathHelper.ToRadians(pr);
                 }
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show(checker.ToString() +ex.Message);
+                //MessageBox.Show(checker.ToString() +ex.Message);
             }
 
         }
 
-        /// Converts a MemoryStream to a byte array
         private byte[] GetDataFromMemoryStream(MemoryStream ms)
         {
             byte[] result;
-
-            //Async method called this, so lets lock the object to make sure other threads/async calls need to wait to use it.
             lock (ms)
             {
                 int bytesWritten = (int)ms.Position;
@@ -277,8 +239,6 @@ namespace Networked_game
             return result;
         }
 
-        /// Code to actually send the data to the client
-        /// <param name="b">Data to send</param>
         public void SendData(byte[] b)
         {
             //Try to send the data.  If an exception is thrown, disconnect the client
@@ -291,12 +251,10 @@ namespace Networked_game
             }
             catch (Exception e)
             {
-                MessageBox.Show("2 " + e.Message);
+                //MessageBox.Show("2 " + e.Message);
             }
         }
 
-        /// This is called when the game should draw itself.
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
@@ -308,11 +266,6 @@ namespace Networked_game
                 if (gameObject!=null)
                     gameObject.Draw().Draw(gameTime, spriteBatch);
             }
-            foreach (GameplayObject gameObject in playerBullets)
-                gameObject.Draw(gameTime, spriteBatch);
-            foreach (GameplayObject gameObject in enemyBullets)
-                gameObject.Draw(gameTime, spriteBatch);
-
             spriteBatch.DrawString(font, "Rotation   :" + ((int)(MathHelper.ToDegrees(player.player.Rotation)+90+360)%360).ToString(), new Vector2(10, 540), Color.White);
             spriteBatch.DrawString(font, "Speed      :"+ player.fv, new Vector2(10, 560), Color.White);
             spriteBatch.DrawString(font, "Coordinates: " + new Vector2((-(int)player.origin.Position.X+400)/10, (int)(player.origin.Position.Y-300)/10).ToString(), new Vector2(10, 580), Color.White);

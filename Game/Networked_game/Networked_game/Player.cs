@@ -26,7 +26,6 @@ namespace Networked_game
         public GameplayObject player;
         public GameplayObject origin;
 
-
         public Player(GameplayObject player, float ms, float fa, float ba, float fv, float mfv, float mbv, Texture2D texture,Vector2 position)
         {
             this.player = player;

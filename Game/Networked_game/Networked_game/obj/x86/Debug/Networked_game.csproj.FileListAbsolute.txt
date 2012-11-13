@@ -40,3 +40,4 @@ D:\set\belgeler\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86
 D:\set\belgeler\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\font1.xnb
 C:\Users\dakmor\Documents\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\fluffyball.xnb
 C:\Users\dakmor\Documents\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\font1.xnb
+C:\Users\dakmor\Documents\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Networked_game.exe.config
