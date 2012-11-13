@@ -26,7 +26,6 @@ namespace Networked_game
         public GameplayObject player;
         public GameplayObject origin;
 
-
         public Player(GameplayObject player, float ms, float fa, float ba, float fv, float mfv, float mbv, Texture2D texture,Vector2 position)
         {
             this.player = player;
@@ -74,6 +73,7 @@ namespace Networked_game
                 else
                     fv = mbv;
             }
+            
             origin.Velocity = new Vector2(-fv * (float)Math.Cos(player.Rotation), -fv * (float)Math.Sin(player.Rotation));
             origin.Update(gameTime);
         }

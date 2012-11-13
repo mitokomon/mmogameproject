@@ -71,7 +71,7 @@ namespace RelayServer
                 //Write in the form {Protocol}{User_ID}{User_IP}
                 writer.Write(Properties.Settings.Default.NewPlayerByteProtocol);
                 writer.Write(user.id);
-                writer.Write(user.IP);
+                //writer.Write(user.IP);
 
                 SendData(GetDataFromMemoryStream(writeStream), user);
             }
@@ -104,7 +104,7 @@ namespace RelayServer
                 //Write in the form {Protocol}{User_ID}{User_IP}
                 writer.Write(Properties.Settings.Default.DisconnectedPlayerByteProtocol);
                 writer.Write(user.id);
-                writer.Write(user.IP);
+                //writer.Write(user.IP);
 
                 SendData(GetDataFromMemoryStream(writeStream), user);
             }
@@ -129,7 +129,7 @@ namespace RelayServer
             {
                 //Append the id and IP of the original sender to the message, and combine the two data sets.
                 writer.Write(sender.id);
-                writer.Write(sender.IP);
+                //writer.Write(sender.IP);
                 data = CombineData(data, writeStream);
             }
 

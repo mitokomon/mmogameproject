@@ -4,3 +4,9 @@ C:\Users\dakmor\Desktop\RelayServer\RelayServer\bin\Release\RelayServer.pdb
 C:\Users\dakmor\Desktop\RelayServer\RelayServer\obj\x86\Release\ResolveAssemblyReference.cache
 C:\Users\dakmor\Desktop\RelayServer\RelayServer\obj\x86\Release\RelayServer.exe
 C:\Users\dakmor\Desktop\RelayServer\RelayServer\obj\x86\Release\RelayServer.pdb
+C:\Users\dakmor\Documents\GitHub\mmogameproject\RelayServer\RelayServer\bin\Release\RelayServer.exe.config
+C:\Users\dakmor\Documents\GitHub\mmogameproject\RelayServer\RelayServer\obj\x86\Release\RelayServer.exe
+C:\Users\dakmor\Documents\GitHub\mmogameproject\RelayServer\RelayServer\obj\x86\Release\RelayServer.pdb
+C:\Users\dakmor\Documents\GitHub\mmogameproject\RelayServer\RelayServer\bin\Release\RelayServer.exe
+C:\Users\dakmor\Documents\GitHub\mmogameproject\RelayServer\RelayServer\bin\Release\RelayServer.pdb
+C:\Users\dakmor\Documents\GitHub\mmogameproject\RelayServer\RelayServer\obj\x86\Release\ResolveAssemblyReference.cache
