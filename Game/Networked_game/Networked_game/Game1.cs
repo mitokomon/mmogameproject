@@ -23,8 +23,8 @@ namespace Networked_game
         SpriteBatch spriteBatch;
         SpriteFont font;
         TcpClient client;
-        string IP = "127.0.0.1";
-        int PORT = 1490;
+        string IP = connectionInfo.Default.Ip;
+        int PORT = connectionInfo.Default.Port;
         int BUFFER_SIZE = 2048;
         byte[] readBuffer;
         MemoryStream readStream, writeStream;

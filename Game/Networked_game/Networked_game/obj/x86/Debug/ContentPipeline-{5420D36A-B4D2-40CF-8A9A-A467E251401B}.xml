@@ -8,7 +8,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\dakmor\Documents\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\BulletPaper_2.xnb</Output>
-      <Time>2012-11-13T01:47:34.6549451+02:00</Time>
+      <Time>2012-11-13T14:56:33.6454421+02:00</Time>
     </Item>
     <Item>
       <Source>EnemyPaper-2.png</Source>
@@ -17,7 +17,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\dakmor\Documents\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\EnemyPaper-2.xnb</Output>
-      <Time>2012-11-13T01:47:34.6549451+02:00</Time>
+      <Time>2012-11-13T14:56:33.6464422+02:00</Time>
     </Item>
     <Item>
       <Source>PlayerPaper.png</Source>
@@ -26,7 +26,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\dakmor\Documents\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\PlayerPaper.xnb</Output>
-      <Time>2012-11-13T01:47:34.6609454+02:00</Time>
+      <Time>2012-11-13T14:56:33.6484423+02:00</Time>
     </Item>
     <Item>
       <Source>origin.png</Source>
@@ -35,7 +35,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\dakmor\Documents\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\origin.xnb</Output>
-      <Time>2012-11-13T01:47:34.6649457+02:00</Time>
+      <Time>2012-11-13T14:56:33.6534426+02:00</Time>
     </Item>
     <Item>
       <Source>fluffyball.png</Source>
@@ -44,7 +44,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\dakmor\Documents\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\fluffyball.xnb</Output>
-      <Time>2012-11-13T01:47:34.6619455+02:00</Time>
+      <Time>2012-11-13T14:56:33.6484423+02:00</Time>
     </Item>
     <Item>
       <Source>font1.spritefont</Source>
@@ -53,7 +53,7 @@
       <Processor>FontDescriptionProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\dakmor\Documents\GitHub\mmogameproject\Game\Networked_game\Networked_game\bin\x86\Debug\Content\font1.xnb</Output>
-      <Time>2012-11-13T01:47:34.6619455+02:00</Time>
+      <Time>2012-11-13T14:56:33.6494423+02:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
