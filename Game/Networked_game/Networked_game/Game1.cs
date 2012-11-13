@@ -138,14 +138,11 @@ namespace Networked_game
                 gameObject.Update(gameTime);
             foreach (GameplayObject gameObject in enemyBullets)
                 gameObject.Update(gameTime);
-
-
-
                 writeStream.Position = 0;
                 writer.Write((byte)Protocol.PlayerMoved);
-                writer.Write(String.Format("{0:0.0#}",player.getPosition().X));
-                writer.Write(String.Format("{0:0.0#}", player.getPosition().Y));
-                writer.Write(String.Format("{0:0.0#}",player.player.Rotation));
+                writer.Write((Int16)player.getPosition().X);
+                writer.Write((Int16)player.getPosition().Y);
+                writer.Write((Int16)MathHelper.ToDegrees(player.player.Rotation));
                 SendData(GetDataFromMemoryStream(writeStream));
 
             if (bulletTimer.TotalSeconds > 0) bulletTimer = bulletTimer.Subtract(gameTime.ElapsedGameTime);
@@ -205,51 +202,59 @@ namespace Networked_game
 
         private void ProcessData(byte[] data)
         {
-            readStream.SetLength(0);
-            readStream.Position = 0;
+            int checker=0;
 
+            readStream.SetLength(0); 
+            readStream.Position = 0; 
             readStream.Write(data, 0, data.Length);
-            readStream.Position = 0;
+            readStream.Position = 0; 
 
             Protocol p;
 
             try
             {
-                p = (Protocol)reader.ReadByte();
+                p = (Protocol)reader.ReadByte(); 
                 if (p == Protocol.Connected)
                 {
-                    byte id = reader.ReadByte();
-                    string ip = reader.ReadString();
+
+                    byte id = reader.ReadByte(); 
+                    //string ip = reader.ReadString();
                     if (players[id] == null)
+                    {
                         players[id] = new PlayerX(new GameplayObject(), Content.Load<Texture2D>("PlayerPaper"));
+                        writeStream.Position = 0;
+                        writer.Write((byte)Protocol.Connected);
+                        SendData(GetDataFromMemoryStream(writeStream));
+                    }
                 }
-                //if (p == Protocol.Disconnected)
-                //{
-                //    byte id = reader.ReadByte();
-                //    string ip = reader.ReadString();
-                //}
-                if (p == Protocol.PlayerMoved)
+                if (p == Protocol.Disconnected)
                 {
-                    string px = reader.ReadString();
-                    string py = reader.ReadString();
-                    string pr = reader.ReadString();
                     byte id = reader.ReadByte();
                     //string ip = reader.ReadString();
+                    players[id] = null;
+                }
+                if (p == Protocol.PlayerMoved)
+                {
+                    float px = reader.ReadInt16(); checker = 11;
+                    float py = reader.ReadInt16(); checker = 12;
+                    float pr = reader.ReadInt16(); checker = 13;
+                    byte id = reader.ReadByte(); checker = 14;
+                    //string ip = reader.ReadString(); checker = 5;
                     if (players[id] == null)
                         players[id] = new PlayerX(new GameplayObject(), Content.Load<Texture2D>("PlayerPaper"));
                     if (px != null && pr != null && players[id]!=null)
                     {
-                        players[id].positionX = -float.Parse(px) + player.origin.Position.X ;
-                        players[id].positionY = -float.Parse(py) + player.origin.Position.Y ;
+                        players[id].positionX = -px + player.origin.Position.X ;
+                        players[id].positionY = -py + player.origin.Position.Y ;
                     }
                     if (pr!=null & players[id]!=null)
-                        players[id].player.Rotation = float.Parse(pr);
+                        players[id].player.Rotation =MathHelper.ToRadians(pr);
                 }
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show("1 " +ex.Message);
+                MessageBox.Show(checker.ToString() +ex.Message);
             }
 
         }
