@@ -25,8 +25,8 @@ namespace Networked_game
             this.player=player;
             player.Texture=texture;
             player.Rotation = MathHelper.ToRadians(-90);
-            positionX = 400;
-            positionY = 400;
+            positionX = 0;
+            positionY = 0;
         }
 
         public GameplayObject Draw()

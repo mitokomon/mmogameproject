@@ -240,8 +240,8 @@ namespace Networked_game
                     float pr = reader.ReadInt16(); checker = 13;
                     byte id = reader.ReadByte(); checker = 14;
                     //string ip = reader.ReadString(); checker = 5;
-                    if (players[id] == null)
-                        players[id] = new PlayerX(new GameplayObject(), Content.Load<Texture2D>("PlayerPaper"));
+                    //if (players[id] == null)
+                    //    players[id] = new PlayerX(new GameplayObject(), Content.Load<Texture2D>("PlayerPaper"));
                     if (px != null && pr != null && players[id]!=null)
                     {
                         players[id].positionX = -px + player.origin.Position.X ;
